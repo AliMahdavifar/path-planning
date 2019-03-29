@@ -1,0 +1,34 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../include/PathPlanner.h
+iostream
+-
+cmath
+-
+vector
+-
+map
+-
+queue
+-
+
+../include/YAMLParser.h
+PathPlanner.h
+../include/PathPlanner.h
+yaml-cpp/yaml.h
+../include/yaml-cpp/yaml.h
+
+/home/vishnu/Downloads/postmatesx/path-planning/src/PathPlanner.cpp
+PathPlanner.h
+/home/vishnu/Downloads/postmatesx/path-planning/src/PathPlanner.h
+
+/home/vishnu/Downloads/postmatesx/path-planning/src/YAMLParser.cpp
+YAMLParser.h
+/home/vishnu/Downloads/postmatesx/path-planning/src/YAMLParser.h
+
