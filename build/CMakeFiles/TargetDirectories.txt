@@ -1,4 +1,0 @@
-/home/vishnu/Downloads/postmatesx/path-planning/build/CMakeFiles/edit_cache.dir
-/home/vishnu/Downloads/postmatesx/path-planning/build/CMakeFiles/rebuild_cache.dir
-/home/vishnu/Downloads/postmatesx/path-planning/build/CMakeFiles/LibsModule.dir
-/home/vishnu/Downloads/postmatesx/path-planning/build/CMakeFiles/pathplanner.dir
