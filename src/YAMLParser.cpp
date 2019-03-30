@@ -1,9 +1,15 @@
+/* 
+ *  File: YAMLParser.cpp
+ *  Username: vishnu
+ *  Date: Sat Mar 30 2019
+ */
+
 #include "YAMLParser.h"
 
-void parseGoals(string sn, Pose &pose)
+void parseGoals(YAML::Node &sn, Pose &pose)
 {
-
-    std::istringstream str_buf{sn};
+    string ps = sn.as<string>();
+    std::istringstream str_buf{ps};
     int x;
     std::vector<int> v;
     

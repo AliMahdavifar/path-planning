@@ -1,3 +1,9 @@
+/* 
+ *  File: PathPlanner.h
+ *  Username: vishnu
+ *  Date: Sat Mar 30 2019
+ */
+
 #pragma once
 
 #include <iostream>
@@ -69,6 +75,14 @@ struct Pose
     {
     }
 
+    /**
+     * @brief Destroy the Pose object
+     * 
+     */
+    virtual ~Pose()
+    {
+
+    }
     /**
      * @brief Checks if the pose is valid in the given world
      * 
@@ -165,6 +179,15 @@ struct Node
     }
 
     /**
+     * @brief Destroy the Node object
+     * 
+     */
+    virtual ~Node()
+    {
+
+    }
+
+    /**
      * @brief Overloading '<' Operator
      * 
      * @param lhs 
@@ -217,6 +240,7 @@ class PathPlanner
      */
     typedef pair<int, int> location;
     typedef pair<int, int> Command;
+    bool initialize_flag = 0;
 
   public:
     /* Six possible motions - FS, FR, FL, BS, BR, BL */
@@ -229,50 +253,47 @@ class PathPlanner
      * @brief Construct a new Path Planner object
      * 
      */
-    PathPlanner(/* args */);
+    PathPlanner();
     
     /**
      * @brief Construct a new Path Planner object
      * 
-     * @param world 
-     * @param start 
-     * @param goal 
+     * @param world Grid defined as a 2d vector 0 - FREECELL, 1 - OCCUPIED
+     * @param start Pose(X, Y, Theta)
+     * @param goal Pose(X,Y,Theta)
      */
     PathPlanner(const vector<vector<int>> &world, const Pose &start, const Pose &goal);
     
     /**
-     * @brief 
+     * @brief Takes current state and command to compute next state using motion model
      * 
-     * @param current_state 
-     * @param command 
-     * @return Pose 
+     * @param current_state Pose(X,Y,Theta)
+     * @param command Command pair<direction, steering>
+     * @return Pose  Pose(X,Y,Theta)
      */
     Pose NextState(const Pose &current_state, const Command &command);
     
     /**
-     * @brief 
+     * @brief Takes current node and computes all possible, valied nodes to explore
      * 
-     * @param current_node 
+     * @param current_node Node
      * @return vector<Node> 
      */
     vector<Node> Expand(const Node &current_node);
     
     /**
-     * @brief 
+     * @brief Function implements A* logic to compute optimal set of actions
      * 
-     * @param world 
-     * @param start 
-     * @param goal 
      * @return vector<string> 
      */
-    vector<string> Plan(const vector<vector<int>> &world, const Pose &start, const Pose &goal);
+    vector<string> Plan();
     
     /**
-     * @brief 
+     * @brief Computes Euclidean distance between poses
      * 
-     * @param p1 
-     * @param goal 
-     * @return double 
+     * @param p1 Pose(X,Y,Theta)
+     * @param goal Pose(X,Y,Theta)
+     * @return double distance
      */
     double Heuristic(const Pose &p1, const Pose &goal);
     
@@ -293,8 +314,8 @@ template <typename PQElement>
 struct PriorityQueue
 {
     /**
-     * @brief 
-     * 
+     * @brief Struct
+     *  This implements a priority queue to hold frontier set
      */
 
     priority_queue<PQElement, vector<PQElement>,
@@ -302,7 +323,7 @@ struct PriorityQueue
         elements;
 
     /**
-     * @brief 
+     * @brief Check if frontier is empty
      * 
      * @return true 
      * @return false 
@@ -313,7 +334,7 @@ struct PriorityQueue
     }
 
     /**
-     * @brief 
+     * @brief Add and element to the queue
      * 
      * @param item 
      */
@@ -323,7 +344,7 @@ struct PriorityQueue
     }
 
     /**
-     * @brief 
+     * @brief Get an element with defined priority
      * 
      * @return PQElement 
      */
@@ -334,7 +355,7 @@ struct PriorityQueue
         return best_item;
     }
     /**
-     * @brief 
+     * @brief Printing priority queue (DEBUGGING PURPOSE)
      * 
      */
     inline void print_()
