@@ -32,9 +32,9 @@ A simple version of Hybrid A* is implemented by simplifying the Ackermann model.
 
 > Please make sure that you have `CMake` installed in the system.
 
-- Extract the directory and go to path-planning directory
+- Clone this repository and go to path-planning directory
 ```
-unzip path-planning.zip && cd path-planning
+git clone https://github.com/vvrs/path-planning.git && cd path-planning
 ```
 
 - Now, build the code using the bash script given in the folder
