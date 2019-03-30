@@ -18,7 +18,9 @@ int main()
         y_end = config["end"].as<string>();
     
     vector<string> obstacles;
-    YAML::Node obst = config["obstacles"];
+    YAML::Node obst;
+    if(config["obstacles"])
+         obst = config["obstacles"];
 
     if(DEBUG)
         cout<<obst.size()<<endl;
@@ -29,7 +31,11 @@ int main()
 
     parseGoals(y_start,start);
     parseGoals(y_end,goal);
-
+    if(!start.isValid() || !goal.isValid())
+    {
+        cout<<"Path not achievable\n";
+        return 0;
+    }
     if(DEBUG)
     {
         cout<<start<<endl;
@@ -53,6 +59,13 @@ int main()
     PathPlanner planner(world,start,goal);
     
     std::vector<string> moves = planner.Plan(world, start, goal);
+
+    if(moves.size()==0)
+    {
+        cout<<"Path not achievable\n";
+        return 0;
+    }
+
     cout<<moves.size()<<",";
 
     size_t i;

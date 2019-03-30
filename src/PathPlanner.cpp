@@ -58,10 +58,10 @@ vector<Node> PathPlanner::Expand(const Node& node)
     for(auto move : m_MotionModel)
     {
         Pose current_state = NextState(pose, move.second);
-        if(current_state.isValid())
+        if(current_state.isValid() && !(world[current_state.x][current_state.y]))
         {
         Node current_node;
-        current_node.parent = pose;
+        // current_node.parent = node.pose;
         current_node.pose = current_state;
         current_node.h = Heuristic(current_state,goal);
         current_node.g = g + Heuristic(pose,current_state);
@@ -99,7 +99,7 @@ vector<string> PathPlanner::Plan(const vector<vector<int>> &world, const Pose &s
     state.f = f;
     state.g = g;
     state.h = h;
-
+    // state.parent = start;
     closed[theta][state.pose.x][state.pose.y] = 1;
     came_from[theta][state.pose.x][state.pose.y] = state;
 
@@ -114,16 +114,11 @@ vector<string> PathPlanner::Plan(const vector<vector<int>> &world, const Pose &s
         {
             cout<<"exploring...\n";
             cout<<"Frontier:"<<endl;
+            frontier.print_();
+            cout<<"Frontier end...\n";
         }
         
         Node next = frontier.get();
-
-        if(DEBUG)
-        {
-            frontier.print_();
-            cout<<"Frontier end...\n";
-            cout<<"Best next node selected:: \n";
-        }
 
         if(next.pose == goal )
         {
@@ -165,7 +160,7 @@ vector<string> PathPlanner::Plan(const vector<vector<int>> &world, const Pose &s
             if(current_pose.x < 0 || current_pose.x > GRID_SIZE_W || current_pose.y < 0 || current_pose.y > GRID_SIZE_H)
                 continue;
 
-            if(closed[current_pose.theta][current_pose.x][current_pose.y] == 0 && world[current_pose.x][current_pose.y] == 0)
+            if(closed[current_pose.theta][current_pose.x][current_pose.y] == 0)
             {
                 Node current_node;
 

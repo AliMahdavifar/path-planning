@@ -116,7 +116,7 @@ struct Node
      * 
      */
     Pose pose;
-    Pose parent;
+    // Pose parent;
     double f;
     double g;
     double h;
@@ -141,14 +141,13 @@ struct Node
      * @brief Construct a new Node object
      * 
      * @param pose 
-     * @param parent 
      * @param f 
      * @param g 
      * @param h 
      * @param command 
      */
-    Node(const Pose &pose, const Pose &parent, const double &f, const double &g, const double &h, const string &command)
-        : pose(pose), parent(parent), f(f), g(g), h(h), command(command)
+    Node(const Pose &pose, const double &f, const double &g, const double &h, const string &command)
+        : pose(pose), f(f), g(g), h(h), command(command)
     {
     }
 
