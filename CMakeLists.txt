@@ -9,8 +9,8 @@ add_definitions(-std=c++11 -g  -Wall)
 set(CXX_FLAGS "-Wall")
 set(CMAKE_CXX_FLAGS "${CXX_FLAGS}")
 
-execute_process(COMMAND git submodule update --init -- external/yaml-cpp
-                    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+# execute_process(COMMAND git submodule update --init -- external/yaml-cpp
+#                     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 add_subdirectory(external/yaml-cpp)
 
 #src files
