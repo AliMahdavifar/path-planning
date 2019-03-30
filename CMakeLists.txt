@@ -30,6 +30,6 @@ target_link_libraries(LibsModule yaml-cpp)
 include_directories(include)
 
 #Destination file
-add_executable(pathplanner Main.cpp ${sources})
+add_executable(pathplanner ${sources})
 target_link_libraries(pathplanner LibsModule)
 # target_link_libraries(yaml-cpp )
