@@ -13,6 +13,8 @@
 #include <vector>
 #include <map>
 #include <queue>
+
+#include "PriorityQueue.hpp"
 using namespace std;
 
 #define GRID_SIZE_W 13
@@ -21,8 +23,10 @@ using namespace std;
 
 #define DEBUG 0
 
+namespace HAStar
+{
 /**
- * @brief Directions 
+ * @brief Directions
  *  F - Forward
  *  B - Reverse
  */
@@ -58,7 +62,7 @@ struct Pose
     int theta;
     /**
      * @brief Construct a new Pose object
-     * 
+     *
      */
     Pose()
     {
@@ -66,10 +70,10 @@ struct Pose
 
     /**
      * @brief Construct a new Pose object
-     * 
-     * @param x 
-     * @param y 
-     * @param theta 
+     *
+     * @param x
+     * @param y
+     * @param theta
      */
     Pose(const int &x, const int &y, const int &theta) : x(x), y(y), theta(theta)
     {
@@ -77,7 +81,7 @@ struct Pose
 
     /**
      * @brief Destroy the Pose object
-     * 
+     *
      */
     virtual ~Pose()
     {
@@ -85,9 +89,9 @@ struct Pose
     }
     /**
      * @brief Checks if the pose is valid in the given world
-     * 
-     * @return true 
-     * @return false 
+     *
+     * @return true
+     * @return false
      */
     bool isValid()
     {
@@ -96,10 +100,10 @@ struct Pose
 
     /**
      * @brief Overloading output stream (DEBUGGING PURPOSE)
-     * 
-     * @param os 
-     * @param ps 
-     * @return ostream& 
+     *
+     * @param os
+     * @param ps
+     * @return ostream&
      */
     friend ostream &operator<<(ostream &os, const Pose &ps)
     {
@@ -109,11 +113,11 @@ struct Pose
 
     /**
      * @brief Overloading '==' operator
-     * 
-     * @param lhs 
-     * @param rhs 
-     * @return true 
-     * @return false 
+     *
+     * @param lhs
+     * @param rhs
+     * @return true
+     * @return false
      */
     friend bool operator==(const Pose &lhs, const Pose &rhs)
     {
@@ -125,9 +129,9 @@ struct Node
 {
     /**
      * @brief STRUCT Node
-     * 
-     * Implements a node that holds the costs, poses, and corresponding commands 
-     * 
+     *
+     * Implements a node that holds the costs, poses, and corresponding commands
+     *
      */
     Pose pose;
     // Pose parent;
@@ -142,23 +146,23 @@ struct Node
     // BS - Reverse, Straight
     // BR - Reverse, Right
     // BL - Reverse, Left
-    string command; 
+    string command;
 
     /**
      * @brief Construct a new Node object
-     * 
+     *
      */
     Node()
     {
     }
     /**
      * @brief Construct a new Node object
-     * 
-     * @param pose 
-     * @param f 
-     * @param g 
-     * @param h 
-     * @param command 
+     *
+     * @param pose
+     * @param f
+     * @param g
+     * @param h
+     * @param command
      */
     Node(const Pose &pose, const double &f, const double &g, const double &h, const string &command)
         : pose(pose), f(f), g(g), h(h), command(command)
@@ -167,11 +171,11 @@ struct Node
 
     /**
      * @brief Construct a new Node object
-     * 
-     * @param pose 
-     * @param f 
-     * @param g 
-     * @param h 
+     *
+     * @param pose
+     * @param f
+     * @param g
+     * @param h
      */
     Node(const Pose &pose, const double &f, const double &g, const double &h)
         : pose(pose), f(f), g(g), h(h)
@@ -180,7 +184,7 @@ struct Node
 
     /**
      * @brief Destroy the Node object
-     * 
+     *
      */
     virtual ~Node()
     {
@@ -189,11 +193,11 @@ struct Node
 
     /**
      * @brief Overloading '<' Operator
-     * 
-     * @param lhs 
-     * @param rhs 
-     * @return true 
-     * @return false 
+     *
+     * @param lhs
+     * @param rhs
+     * @return true
+     * @return false
      */
     friend bool operator<(const Node &lhs, const Node &rhs)
     {
@@ -204,11 +208,11 @@ struct Node
 
     /**
      * @brief Overloading '>' Operator
-     * 
-     * @param lhs 
-     * @param rhs 
-     * @return true 
-     * @return false 
+     *
+     * @param lhs
+     * @param rhs
+     * @return true
+     * @return false
      */
     friend bool operator>(const Node &lhs, const Node &rhs)
     {
@@ -219,10 +223,10 @@ struct Node
 
     /**
      * @brief Overloading output stream (DEBUGGING PURPOSE)
-     * 
-     * @param os 
-     * @param node 
-     * @return ostream& 
+     *
+     * @param os
+     * @param node
+     * @return ostream&
      */
     friend ostream &operator<<(ostream &os, const Node &node)
     {
@@ -251,120 +255,62 @@ class PathPlanner
 
     /**
      * @brief Construct a new Path Planner object
-     * 
+     *
      */
     PathPlanner();
-    
+
     /**
      * @brief Construct a new Path Planner object
-     * 
+     *
      * @param world Grid defined as a 2d vector 0 - FREECELL, 1 - OCCUPIED
      * @param start Pose(X, Y, Theta)
      * @param goal Pose(X,Y,Theta)
      */
     PathPlanner(const vector<vector<int>> &world, const Pose &start, const Pose &goal);
-    
+
     /**
      * @brief Takes current state and command to compute next state using motion model
-     * 
+     *
      * @param current_state Pose(X,Y,Theta)
      * @param command Command pair<direction, steering>
      * @return Pose  Pose(X,Y,Theta)
      */
     Pose NextState(const Pose &current_state, const Command &command);
-    
+
     /**
      * @brief Takes current node and computes all possible, valied nodes to explore
-     * 
+     *
      * @param current_node Node
-     * @return vector<Node> 
+     * @return vector<Node>
      */
     vector<Node> Expand(const Node &current_node);
-    
+
     /**
      * @brief Function implements A* logic to compute optimal set of actions
-     * 
-     * @return vector<string> 
+     *
+     * @return vector<string>
      */
     vector<string> Plan();
-    
+
     /**
      * @brief Computes Euclidean distance between poses
-     * 
+     *
      * @param p1 Pose(X,Y,Theta)
      * @param goal Pose(X,Y,Theta)
      * @return double distance
      */
     double Heuristic(const Pose &p1, const Pose &goal);
-    
+
     /**
      * @brief Get the Motion Model object
-     * 
+     *
      */
     void GetMotionModel();
-    
+
     /**
      * @brief Destroy the Path Planner object
-     * 
+     *
      */
     virtual ~PathPlanner();
 };
-
-template <typename PQElement>
-struct PriorityQueue
-{
-    /**
-     * @brief Struct
-     *  This implements a priority queue to hold frontier set
-     */
-
-    priority_queue<PQElement, vector<PQElement>,
-                   greater<PQElement>>
-        elements;
-
-    /**
-     * @brief Check if frontier is empty
-     * 
-     * @return true 
-     * @return false 
-     */
-    inline bool empty() const
-    {
-        return elements.empty();
-    }
-
-    /**
-     * @brief Add and element to the queue
-     * 
-     * @param item 
-     */
-    inline void push(PQElement item)
-    {
-        elements.emplace(item);
-    }
-
-    /**
-     * @brief Get an element with defined priority
-     * 
-     * @return PQElement 
-     */
-    PQElement get()
-    {
-        PQElement best_item = elements.top();
-        elements.pop();
-        return best_item;
-    }
-    /**
-     * @brief Printing priority queue (DEBUGGING PURPOSE)
-     * 
-     */
-    inline void print_()
-    {
-        auto temp_pq = elements;
-        while (!temp_pq.empty())
-        {
-            cout << temp_pq.top() << endl;
-            temp_pq.pop();
-        }
-    }
-};
+}

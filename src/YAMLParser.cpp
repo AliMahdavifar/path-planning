@@ -4,9 +4,9 @@
  *  Date: Sat Mar 30 2019
  */
 
-#include "YAMLParser.h"
+#include "YAMLParser.hpp"
 
-void parseGoals(YAML::Node &sn, Pose &pose)
+void parseGoals(YAML::Node &sn, HAStar::Pose &pose)
 {
     string ps = sn.as<string>();
     std::istringstream str_buf{ps};

@@ -6,7 +6,7 @@
 
 #pragma once
 
-#include "PathPlanner.h"
+#include "PathPlanner.hpp"
 #include "yaml-cpp/yaml.h"
 
 /**
@@ -15,7 +15,7 @@
  * @param sn 
  * @param pose 
  */
-void parseGoals(YAML::Node &sn, Pose &pose);
+void parseGoals(YAML::Node &sn, HAStar::Pose &pose);
 
 /**
  * @brief Inserts obstcles in the world defined in YAML

@@ -1,3 +1,4 @@
 build/
 pathplanner
 Notes.md
+/cmake-build-debug/
