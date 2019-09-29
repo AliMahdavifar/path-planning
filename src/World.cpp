@@ -28,7 +28,7 @@ auto x1 = std::min(node1._x, node2._x);
   }
 }
 
-std::vector<DStarLite::Node> DStarLite::World::getNeighbours(const Node &node) {
+std::vector<DStarLite::Node> DStarLite::World::getNeighbors(const Node &node) {
     std::vector<Node> neighbors;
     for(const auto& i : {-1,0,1}){
         for(const auto& j:{-1,0,1}){

@@ -27,7 +27,7 @@ std::ostream &DStarLite::operator<<(std::ostream &os, const Node &node) {
 
 DStarLite::Node::~Node() = default;
 
-DStarLite::DStarLite::DStarLite(const World &world, std::vector<std::vector<double>> g,
+DStarLite::DStarLite::DStarLite(World &world, std::vector<std::vector<double>> g,
                                 std::vector<std::vector<double>> rhs,
                                 std::vector<std::vector<double>> cost, int km)
         : world(world), g(std::move(g)), rhs(std::move(rhs)), cost(std::move(cost)), km(km) {}
@@ -57,7 +57,7 @@ void DStarLite::DStarLite::initialize() {
 
 void DStarLite::DStarLite::updateVertex(Node u) {
     if(u!=world.goal){
-        auto neighbors = world.getNeighbours(u);
+        auto neighbors = world.getNeighbors(u);
         std::vector<double> values;
         for(auto n : neighbors) values.push_back(g[n._x][n._y]+cost[n._x][n._y]);
         rhs[u._x][u._y] = *std::min_element(std::begin(values), std::end(values));
@@ -83,8 +83,44 @@ void DStarLite::DStarLite::computeShortestPath() {
 
         else if(g[u._x][u._y] > rhs[u._x][u._y]){
             g[u._x][u._y] = rhs[u._x][u._y];
-            auto neighbors = world.getNeighbours(u); // this step should only take predecessors, but the world is un-directed graph
+            auto neighbors = world.getNeighbors(u); // this step should only take predecessors, but the world is un-directed graph
             for(auto n : neighbors) if (cost[n._x][n._y] == 1) updateVertex(n);
         }
+        else{
+            g[u._x][u._y] = std::numeric_limits<int>::max();
+            auto neighbors = world.getNeighbors(u); // this step should only take predecessors, but the world is un-directed graph
+            for(auto n : neighbors) if (cost[n._x][n._y] == 1) updateVertex(n);
+            updateVertex(u);
+        }
     }
+}
+
+std::vector<DStarLite::Node> DStarLite::DStarLite::scan(const Node &current, int range) {
+    std::vector<Node> newSet;
+  // used to check the range
+  int rangeChecked = 0;
+  std::vector<Node> statestoUpdate = world.getNeighbors(current);
+  rangeChecked = 1;
+  while (rangeChecked < range) {
+    for (auto state : statestoUpdate) {
+      newSet.push_back(state);
+      std::vector<Node> n = world.getNeighbors(state);
+      for (auto n1 : n) {
+        if (world.grid[n1._y][n1._x] == 0) {
+          cost[n1._y][n1._x] = world._columns * world._rows + 1;
+          newSet.erase(
+              std::remove_if(newSet.begin(), newSet.end(), [&](const Node& x) {
+                return x == n1;
+              }),
+              newSet.end());
+          newSet.push_back(n1);
+        } else {
+          continue;
+        }
+      }
+    }
+    rangeChecked += 1;
+    statestoUpdate = newSet;
+  }
+  return statestoUpdate;
 }

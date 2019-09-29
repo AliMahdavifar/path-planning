@@ -8,8 +8,8 @@
 #include <utility>
 #include <ostream>
 
-namespace DStarLite{
-        class Node {
+namespace DStarLite {
+    class Node {
     public:
         int _x{}, _y{};
         std::pair<double, double> _key = std::make_pair(0.f, 0.f);
@@ -38,9 +38,22 @@ namespace DStarLite{
             }
         }
 
-            friend std::ostream &operator<<(std::ostream &os, const Node &node);
+        struct compare {
+            bool operator()(const Node &l, const Node &r) {
+                if (l._key.first < r._key.first) {
+                    return false;
+                } else {
+                    if ((l._key.first == r._key.first) && (l._key.second < r._key.second))
+                        return false;
+                    else
+                        return true;
+                }
+            }
+        };
 
-            ~Node();
+        friend std::ostream &operator<<(std::ostream &os, const Node &node);
+
+        ~Node();
     };
 
 }

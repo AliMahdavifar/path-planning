@@ -26,7 +26,7 @@ struct World {
     void addObstacle(const Node &node1, const Node &node2);
 
     bool isValid(const Node &node);
-    static std::vector<Node> getNeighbours(const Node& node);
+    static std::vector<Node> getNeighbors(const Node& node);
     friend std::ostream &operator<<(std::ostream &os, const World &world);
 
     virtual ~World();

@@ -13,7 +13,7 @@
 namespace DStarLite {
     class DStarLite {
     public:
-        explicit DStarLite(const World &world, std::vector<std::vector<double>> g,
+        explicit DStarLite(World &world, std::vector<std::vector<double>> g,
                   std::vector<std::vector<double>> rhs, std::vector<std::vector<double>> cost, int km);
 
         std::pair<double, double> calculateKey(Node node);
@@ -24,15 +24,16 @@ namespace DStarLite {
 
         void computeShortestPath();
 
+        std::vector<Node> scan(const Node &current, int range);
 
 
-    private:
+//    private:
         World world;
         std::vector<std::vector<double>> g;
         std::vector<std::vector<double>> rhs;
         std::vector<std::vector<double>> cost;
         int km;
-        PriorityQueue<Node> U;
+        PriorityQueue<Node, std::vector<Node>, Node::compare> U;
         double heuristic(const Node& n);
 
 

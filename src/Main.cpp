@@ -114,7 +114,47 @@ void DStarPlanner_main() {
     std::vector<std::vector<double> > cost(world._rows,
                                            std::vector<double>(world._columns, 1));
 
-    DStarLite::DStarLite dsl(world,g, rhs, cost, km);
+    DStarLite::DStarLite dsl(world, g, rhs, cost, km);
+
+    Node last = start;
+
+    dsl.initialize();
+    dsl.computeShortestPath();
+    while (start != goal) {
+        auto neighbors = DStarLite::World::getNeighbors(start);
+        std::vector<double> neightborCosts;
+        neightborCosts.reserve(neighbors.size());
+        for (auto n : neighbors) {
+            neightborCosts.push_back(dsl.g[n._x][n._y] + dsl.cost[n._x][n._y]);
+        }
+        size_t index =
+                std::min_element(std::begin(neightborCosts), std::end(neightborCosts)) - std::begin(neightborCosts);
+        Node nextStep = neighbors[index];
+        if (dsl.world.grid[nextStep._x][nextStep._y] == 0) {
+            start = nextStep;
+            dsl.world.grid[start._x][start._y] = 2;
+        } else {
+            km += dsl.heuristic(last);
+            last = start;
+
+            dsl.cost[nextStep._x][nextStep._y] = dsl.world._rows * dsl.world._columns + 1;
+            auto neighbors = dsl.scan(nextStep, 2);
+            for (auto n : neighbors) {
+                if (dsl.world.grid[n._x][n._y] == 1) {
+                    dsl.updateVertex(n);
+                }
+                dsl.computeShortestPath();
+            }
+        }
+
+
+    }
+
+    for (auto i : dsl.world.grid) {
+    for (auto j : i)
+        std::cout << j << " ";
+    std::cout << std::endl;
+}
 
 
 }

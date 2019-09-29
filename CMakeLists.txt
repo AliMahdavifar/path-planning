@@ -6,8 +6,8 @@ cmake_minimum_required (VERSION 3.5)
 add_definitions(-std=c++11 -g  -Wall)
 
 #Enable warnings
-set(CXX_FLAGS "-Wall")
-set(CMAKE_CXX_FLAGS "${CXX_FLAGS}")
+#set(CXX_FLAGS "-Wall")
+#set(CMAKE_CXX_FLAGS "${CXX_FLAGS}")
 
 execute_process(COMMAND git submodule update --init -- external/yaml-cpp
                     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
